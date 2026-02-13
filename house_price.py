@@ -1,6 +1,12 @@
 import pandas as pd
+# import numpy as np
+# import matplotlib.pyplot as plt
+# import seaborn as sns
+
+from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
+# from sklearn.model_selection import cross_val_score
 from sklearn.metrics import mean_squared_error
 
 # Sample dataset
@@ -11,6 +17,7 @@ data = {
 }
 
 df = pd.DataFrame(data)
+# data.columns = df.feature_names
 
 X = df[['Area', 'Bedrooms']]
 y = df['Price']
@@ -22,9 +29,22 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 model = LinearRegression()
 model.fit(X_train, y_train)
 
+# Standardizing the dataset
+sc = StandardScaler()
+
+#Fitting the data
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
 # Prediction
 pred = model.predict(X_test)
 
+# #Cross validation
+# reg = LinearRegression()
+# reg.fit(X_train, y_train)
+# mse = cross_val_score(reg, X_train, y_train, 
+#                       scoring = "mean_squared_error", cv = 10)
+# np.mean(mse)
 print("Predicted Prices:", pred)
 print("MSE:", mean_squared_error(y_test, pred))
 
